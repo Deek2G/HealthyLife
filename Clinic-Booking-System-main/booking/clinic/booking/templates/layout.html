@@ -1,0 +1,155 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous" defer></script>
+
+    {% block head %}
+    {% endblock %}
+  
+    <style>
+      /* Custom navbar styling */
+      .navbar {
+          background-color: #f8f9fa;
+      }
+      .nav-link {
+          color: #198754 !important; /* Bootstrap green tone */
+          transition: color 0.3s ease;
+      }
+      .nav-link:hover {
+          color: #145c32 !important; /* Darker green on hover */
+      }
+      .navbar-brand {
+          font-weight: bold;
+          color: #198754 !important;
+      }
+      .navbar-brand:hover {
+          color: #145c32 !important;
+      }
+      /* Footer styling */
+      footer {
+          background-color: #f8f9fa;
+          font-size: 0.9rem;
+      }
+      footer h5 {
+          color: #198754;
+      }
+      footer a {
+          color: #6c757d;
+          text-decoration: none;
+      }
+      footer a:hover {
+          color: #198754;
+          text-decoration: underline;
+      }
+      /* Message alert */
+      .alert-success {
+          background-color: #d1e7dd;
+          border-color: #badbcc;
+          color: #0f5132;
+      }
+    </style>
+
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                HealthyLife
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fs-5 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'booking' %}">Online Booking</a>
+                    </li>
+                    {% if user.is_authenticated and user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'staffPanel' %}">Staff Panel</a>
+                    </li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Profile
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow-sm">
+                            <li><a class="dropdown-item" href="{% url 'userPanel' %}">My Appointments</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Sign Out</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Sign In / Sign Up</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages Start -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Messages End -->
+</header>
+
+{% block body %}
+{% endblock %}
+
+<footer class="py-5 mt-auto">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-md-3 mb-3">
+                <h5>Clinic</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="{% url 'index' %}" class="nav-link p-0">Home</a></li>
+                    <li class="nav-item mb-2"><a href="{% url 'about' %}" class="nav-link p-0">About Us</a></li>
+                    <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0">Booking</a></li>
+                </ul>
+            </div>
+
+            <div class="col-6 col-md-3 mb-3">
+                <h5>Clinic Services</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0">Consultation</a></li>
+                    <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0">Follow-up</a></li>
+                    <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0">Health Check-up</a></li>
+                    <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0">Vaccination</a></li>
+                    <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0">Lab Test</a></li>
+                    <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0">Pediatric Check-up</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between py-4 mt-4 border-top">
+            <p class="mb-0">&copy; 2025 HealthyLife Clinic. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

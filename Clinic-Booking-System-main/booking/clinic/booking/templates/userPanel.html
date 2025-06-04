@@ -1,0 +1,268 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+<title>User Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary-color: #2A9D8F;
+    --secondary-color: #264653;
+    --accent-color: #E9C46A;
+    --danger-color: #e76f51;
+    --text-dark: #2B2D42;
+    --text-light: #EDF2F4;
+}
+
+/* Full-page background */
+.hero-section {
+    background: linear-gradient(
+        to bottom right,
+        rgba(42, 157, 143, 0.7),
+        rgba(38, 70, 83, 0.7)
+    ), url('{% static "images/medical-bg.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Center panel */
+.profile-panel {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3rem;
+    border-radius: 1rem;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 0.8s ease forwards;
+    margin: 5rem auto;
+    max-width: 800px;
+    width: 100%;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    0% {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.profile-panel h1 {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.profile-panel h2 {
+    font-size: 2rem;
+    color: var(--secondary-color);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* Appointment cards */
+.appointment-card {
+    background: var(--primary-color);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-top: 1rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.appointment-card:hover {
+    transform: translateY(-5px);
+}
+
+.appointment-card p {
+    margin: 0.5rem 0;
+}
+
+.appointment-card a {
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.appointment-card a:first-child {
+    background-color: var(--accent-color);
+    color: var(--text-dark);
+}
+
+.appointment-card a:first-child:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.appointment-card a.cancel-btn {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.appointment-card a.cancel-btn:hover {
+    background-color: #d35400;
+}
+
+/* Modal styles */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.modal-buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+}
+
+.modal-buttons a.confirm,
+.modal-buttons button.cancel {
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-buttons a.confirm {
+    background: #e76f51;
+    color: white;
+    text-decoration: none;
+}
+
+.modal-buttons button.cancel {
+    background: #ccc;
+    color: #333;
+}
+
+/* Sign-in message */
+.sign-in-message {
+    text-align: center;
+    background: rgba(255,255,255,0.9);
+    padding: 3rem;
+    border-radius: 1rem;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .profile-panel {
+        padding: 2rem;
+        margin: 3rem 1rem;
+    }
+}
+@keyframes fadeZoom {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-overlay.show .modal-box {
+    animation: fadeZoom 0.3s ease-out;
+}
+
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="hero-section">
+    {% if user.is_authenticated %}
+    <div class="profile-panel">
+        <h1>Welcome, {{ user.first_name }}!</h1>
+
+        {% if appointments.count > 0 %}
+        <div class="appointment-list">
+            <h2>Your Appointments</h2>
+            {% for appointment in appointments %}
+            <div class="appointment-card">
+                <p><strong>Day:</strong> {{ appointment.day }}</p>
+                <p><strong>Time:</strong> {{ appointment.time }}</p>
+                <p><strong>Service:</strong> {{ appointment.service }}</p>
+                <p><strong>Doctor:</strong> {{ appointment.doctor }}</p>
+                <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
+                    <a href="{% url 'userUpdate' appointment.id %}">Edit Appointment</a>
+                    <a href="#" class="cancel-btn" data-url="{% url 'cancelAppointment' appointment.id %}" onclick="openModal(this); return false;">Cancel Appointment</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <h2>No Appointments Yet!</h2>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="sign-in-message">
+        <h1>Please Sign In</h1>
+        <a href="{% url 'login' %}" class="btn btn-primary mt-3">Sign In</a>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Cancel Confirmation Modal -->
+<div class="modal-overlay" id="cancelModal">
+  <div class="modal-box" id="modalBox">
+    <h3>Are you sure you want to cancel this appointment?</h3>
+    <div class="modal-buttons">
+      <a href="#" class="confirm" id="confirmCancel">Yes, Cancel</a>
+      <button class="cancel" onclick="closeModal()">No, Go Back</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(element) {
+    const url = element.getAttribute("data-url");
+    document.getElementById("confirmCancel").setAttribute("href", url);
+    document.getElementById("cancelModal").classList.add("show");
+}
+
+function closeModal() {
+    document.getElementById("cancelModal").classList.remove("show");
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', function(e) {
+    const modal = document.getElementById("cancelModal");
+    const box = document.getElementById("modalBox");
+    if (e.target === modal) {
+        closeModal();
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,207 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+<title>HealthyLife Clinic | About Us</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
+<style>
+:root {
+    --primary-color: #2A9D8F;
+    --secondary-color: #264653;
+    --accent-color: #E9C46A;
+    --text-dark: #2B2D42;
+    --text-light: #EDF2F4;
+}
+
+/* Background */
+body {
+    background: linear-gradient(
+        to bottom right,
+        rgba(42, 157, 143, 0.7),
+        rgba(38, 70, 83, 0.7)
+    ), url('{% static "images/medical-bg.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* About Panel */
+.about-panel {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3rem;
+    border-radius: 1rem;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 0.8s ease forwards;
+    margin: 5rem auto 3rem auto;
+    max-width: 800px;
+    width: 100%;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    0% {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.about-panel h2,
+.about-panel h3 {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.about-panel h2 {
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+.about-panel h3 {
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+}
+
+.about-panel p,
+.about-panel ul {
+    color: var(--text-dark);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    text-align: center;
+}
+
+.about-panel ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.about-panel ul li {
+    margin-bottom: 0.8rem;
+}
+
+/* Doctor Section Panel */
+.doctor-panel {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(6px);
+    padding: 4rem 2rem;
+    margin-top: 2rem;
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Team Section */
+.team-section h2 {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.team-card {
+    border: none;
+    border-radius: 1rem;
+    background-color: #fff;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    height: 100%;
+}
+
+.team-card:hover {
+    transform: translateY(-1rem);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.team-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+
+.team-title {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.team-role {
+    color: var(--secondary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-panel {
+        padding: 2rem;
+        margin: 3rem 1rem;
+    }
+
+    .doctor-panel {
+        padding: 3rem 1rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block body %}
+
+<!-- About Section -->
+<section>
+    <div class="about-panel">
+        <h2>About Us</h2>
+        <p>Welcome to HealthyLife Clinic! We are committed to providing the highest quality medical care. Our dedicated team ensures you get the best treatment possible in a comfortable and welcoming environment.</p>
+
+        <h3>Our Mission</h3>
+        <p>Our mission is to deliver comprehensive healthcare services, focusing on each patient's individual needs. We aim to create an environment where every patient feels cared for and valued.</p>
+
+        <h3>Our Values</h3>
+        <ul>
+            <li><b>Compassion:</b> Treating each patient with kindness and empathy.</li>
+            <li><b>Integrity:</b> Upholding the highest standards of honesty and professionalism.</li>
+            <li><b>Excellence:</b> Striving for continuous improvement and top-quality care.</li>
+        </ul>
+    </div>
+</section>
+
+<!-- Doctors Section -->
+<div class="doctor-panel">
+    <section class="team-section">
+        <div class="container-fluid">
+            <h2 class="text-center">Meet Our Doctors</h2>
+            <div class="row justify-content-center g-4">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="team-card">
+                        <img src="{% static 'images/doctor1.jpg' %}" class="team-image" alt="Dr. Mhel Biol">
+                        <h5 class="team-title">Dr. Mhel Biol</h5>
+                        <p class="team-role">General Practitioner</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="team-card">
+                        <img src="{% static 'images/doctor2.jpg' %}" class="team-image" alt="Dr. Ervin Cantila">
+                        <h5 class="team-title">Dr. Ervin Cantila</h5>
+                        <p class="team-role">Family Medicine Doctor</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="team-card">
+                        <img src="{% static 'images/doctor3.jpg' %}" class="team-image" alt="Dr. Josh Nisperos">
+                        <h5 class="team-title">Dr. Josh Nisperos</h5>
+                        <p class="team-role">Pediatrician</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}
